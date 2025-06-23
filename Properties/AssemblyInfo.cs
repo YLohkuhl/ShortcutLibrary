@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ShortcutLib")]
-[assembly: AssemblyDescription("A library that gives slight/major shortcuts in SR (Slime Rancher) Modding.")]
+[assembly: AssemblyDescription("A library that gives slight - major shortcuts in SR (Slime Rancher) Modding.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FruitsyOG")]
+[assembly: AssemblyCompany("YLohkuhl")]
 [assembly: AssemblyProduct("ShortcutLib")]
-[assembly: AssemblyCopyright("Copyright © FruitsyOG 2022")]
+[assembly: AssemblyCopyright("Copyright © YLohkuhl 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
