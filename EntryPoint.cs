@@ -1,6 +1,10 @@
-namespace ShortcutLib;
+using SRML;
 
-internal class EntryPoint : ModEntryPoint
+namespace ShortcutLib
 {
-    
+    internal class EntryPoint : ModEntryPoint
+    {
+        public override void PreLoad() => 
+            HarmonyInstance.PatchAll();
+    }
 }

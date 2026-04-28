@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ShortcutLib</RootNamespace>
     <AssemblyName>ShortcutLib</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>default</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,6 +41,9 @@
     <DefaultDocumentationFolder>bin\Release\Documentation</DefaultDocumentationFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\usr\share\steam\steamapps\common\Slime Rancher\SRML\Libs\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="0Harmony, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\System\SteamLibrary\steamapps\common\Slime Rancher\SRML\Libs\0Harmony.dll</HintPath>
@@ -48,6 +51,9 @@
     <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\User\Documents+\Random\Assembly-CSharp-Publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="SRML">
+      <HintPath>..\..\..\..\..\usr\share\steam\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\SRML.dll</HintPath>
     </Reference>
     <Reference Include="SRML, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -89,49 +95,63 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Archived\Archived2\Components\ShortcutBehaviour.cs" />
-    <Compile Include="Archived\Archived2\Extensions\ShortcutMatExtensions.cs" />
-    <Compile Include="Archived\Archived2\Extensions\ShortcutSlimeExtensions.cs" />
-    <Compile Include="Archived\Archived2\Extensions\ShortcutUtilExtensions.cs" />
-    <Compile Include="Archived\Archived2\Extras\Asset.cs" />
-    <Compile Include="Archived\Archived2\Extras\Debugging.cs" />
-    <Compile Include="Archived\Archived2\Extras\External.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Harmony\GordoRewardsBaseGiveRewardsPatch.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Harmony\SlimeDietGetFoodCategoryMsgPatch.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Harmony\SlimeEatGetFoodGroupIdsPatch.cs" />
-    <Compile Include="Archived\Archived2\Presets\Paths.cs" />
-    <Compile Include="Archived\Archived2\Presets\Sizes.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Achieve.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Definition.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Director.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\EatMap.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Edible.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Enum.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Fashion.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\FoodGroup.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Gordo.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Mail.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Ornament.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Plot.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Prefab.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Registry.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Resource.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Slime.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Spawner.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Translate.cs" />
-    <AdditionalFiles Include="Archived\Archived2\Shortcut\Treasure.cs" />
+    <Compile Include="_Legacy\Shortcut.cs" />
+    <Compile Include="Lib\SR\AchievementCut.cs" />
+    <Compile Include="Lib\SR\DefinitionCut.cs" />
+    <Compile Include="Lib\SR\LiquidCut.cs" />
+    <Compile Include="Lib\SR\MeshCut.cs" />
+    <Compile Include="Lib\SR\Slime\GordoCut.cs" />
+    <Compile Include="Lib\SR\Slime\SlimeCut.cs" />
+    <Compile Include="Lib\SR\Slime\StructureCut.cs" />
+    <Compile Include="Lib\SR\TranslationCut.cs" />
+    <Compile Include="Lib\Utils\AssetUtil.cs" />
+    <Compile Include="Lib\Utils\Classes\BaseClass.cs" />
+    <Compile Include="Lib\Utils\Classes\ColorPalette.cs" />
+    <Compile Include="Lib\Utils\Extensions\EnumExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\FoodGroupExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\GameObjectExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\IdentifiableExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\MaterialExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\PediaExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\PrefabExtensions.cs" />
+    <Compile Include="Lib\Utils\Extensions\TextureExtensions.cs" />
+    <Compile Include="Lib\Utils\GenUtil.cs" />
+    <Compile Include="Lib\Utils\Structs\VectorQuaternion.cs" />
+    <Compile Include="Harmony\PatchSlimeDietGetFoodCategoryMsg.cs" />
+    <Compile Include="ShortcutLibraryException.cs" />
+    <None Include="Archived\Archived2\Components\ShortcutBehaviour.cs" />
+    <None Include="Archived\Archived2\Extensions\ShortcutMatExtensions.cs" />
+    <None Include="Archived\Archived2\Extensions\ShortcutSlimeExtensions.cs" />
+    <None Include="Archived\Archived2\Extensions\ShortcutUtilExtensions.cs" />
+    <None Include="Archived\Archived2\Extras\Asset.cs" />
+    <None Include="Archived\Archived2\Extras\Debugging.cs" />
+    <None Include="Archived\Archived2\Extras\External.cs" />
+    <None Include="Archived\Archived2\Harmony\GordoRewardsBaseGiveRewardsPatch.cs" />
+    <None Include="Archived\Archived2\Harmony\SlimeDietGetFoodCategoryMsgPatch.cs" />
+    <None Include="Archived\Archived2\Harmony\SlimeEatGetFoodGroupIdsPatch.cs" />
+    <None Include="Archived\Archived2\Presets\Paths.cs" />
+    <None Include="Archived\Archived2\Presets\Sizes.cs" />
+    <None Include="Archived\Archived2\Shortcut\Achieve.cs" />
+    <None Include="Archived\Archived2\Shortcut\Definition.cs" />
+    <None Include="Archived\Archived2\Shortcut\Director.cs" />
+    <None Include="Archived\Archived2\Shortcut\EatMap.cs" />
+    <None Include="Archived\Archived2\Shortcut\Edible.cs" />
+    <None Include="Archived\Archived2\Shortcut\Enum.cs" />
+    <None Include="Archived\Archived2\Shortcut\Fashion.cs" />
+    <None Include="Archived\Archived2\Shortcut\FoodGroup.cs" />
+    <None Include="Archived\Archived2\Shortcut\Gordo.cs" />
+    <None Include="Archived\Archived2\Shortcut\Mail.cs" />
+    <None Include="Archived\Archived2\Shortcut\Ornament.cs" />
+    <None Include="Archived\Archived2\Shortcut\Plot.cs" />
+    <None Include="Archived\Archived2\Shortcut\Prefab.cs" />
+    <None Include="Archived\Archived2\Shortcut\Registry.cs" />
+    <None Include="Archived\Archived2\Shortcut\Resource.cs" />
+    <None Include="Archived\Archived2\Shortcut\Slime.cs" />
+    <None Include="Archived\Archived2\Shortcut\Spawner.cs" />
+    <None Include="Archived\Archived2\Shortcut\Translate.cs" />
+    <None Include="Archived\Archived2\Shortcut\Treasure.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="SR\DefinitionCut.cs" />
-    <Compile Include="SR\SlimeCut.cs" />
     <Compile Include="usings.cs" />
-    <Compile Include="Utils\AssetUtil.cs" />
-    <Compile Include="Utils\ShortcutLibError.cs" />
-    <Compile Include="Utils\Extensions\MaterialExtensions.cs" />
-    <Compile Include="Utils\Extensions\PrefabExtensions.cs" />
-    <Compile Include="Utils\Extensions\IdentifiableExtensions.cs" />
-    <Compile Include="Utils\GeneralUtil.cs" />
-    <Compile Include="Utils\Structs\ColorStruct.cs" />
-    <Compile Include="Utils\Structs\SlimeStruct.cs" />
     <None Include="Archived\Assets.cs" />
     <None Include="Archived\Configuration.cs" />
     <None Include="Archived\Debugging.cs" />
@@ -144,14 +164,8 @@
   <ItemGroup>
     <EmbeddedResource Include="modinfo.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lib\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6270.2853\build\PxtlCa.XmlCommentMarkDownGenerator.targets" Condition="Exists('packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6270.2853\build\PxtlCa.XmlCommentMarkDownGenerator.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6270.2853\build\PxtlCa.XmlCommentMarkDownGenerator.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6270.2853\build\PxtlCa.XmlCommentMarkDownGenerator.targets'))" />
-    <Error Condition="!Exists('packages\DefaultDocumentation.0.8.2\build\DefaultDocumentation.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\DefaultDocumentation.0.8.2\build\DefaultDocumentation.targets'))" />
-  </Target>
-  <Import Project="packages\DefaultDocumentation.0.8.2\build\DefaultDocumentation.targets" Condition="Exists('packages\DefaultDocumentation.0.8.2\build\DefaultDocumentation.targets')" />
 </Project>
