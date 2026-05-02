@@ -88,8 +88,7 @@ namespace ShortcutLib.SR
             // *** END *** \\
 
             Identifiable.GORDO_CLASS.Add(id);
-            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("t.", id.ToLower()), name);
-
+            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("t", id.ToLower()), name);
             LookupRegistry.RegisterGordo(prefab);
 
             baseGordo = new BaseGordo(id, name, icon, baseSlime, prefab, rewards, zones, feedCount, behaviours, persistentId);

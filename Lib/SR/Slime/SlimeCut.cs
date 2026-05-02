@@ -16,6 +16,11 @@ namespace ShortcutLib.SR
             ? slimeDefinition.AppearancesDefault[index]
             : slimeDefinition.AppearancesDefault[index].Instantiate();
 
+        public static SlimeAppearance GetSlimeAppearance(this SlimeDefinition slimeDefinition, SlimeAppearance.AppearanceSaveSet saveSet,
+            bool instantiate = false) => !instantiate
+            ? slimeDefinition.GetAppearanceForSet(saveSet)
+            : slimeDefinition.GetAppearanceForSet(saveSet).Instantiate();
+        
         public static void CreateBasePlort(Identifiable.Id baseId, Identifiable.Id id, string name, Sprite icon,
             float baseValue, float fullSaturation, ColorPalette colorPalette, out BasePlort basePlort,
             Type[] behaviours = null)
@@ -102,8 +107,8 @@ namespace ShortcutLib.SR
             slimeDefinition.Diet.RefreshEatMap(SRSingleton<GameContext>.Instance.SlimeDefinitions, slimeDefinition);
 
             // *** APPEARANCE *** \\
-            
-            var slimeAppearance = baseId.GetSlimeDefinition().AppearancesDefault[0].Instantiate();
+
+            var slimeAppearance = slimeDefinition.GetSlimeAppearance(0, true);
             var slimeAppearanceApplicator = prefab.GetComponent<SlimeAppearanceApplicator>();
             slimeAppearance.name = name.Replace("Slime", "").Replace(" ", "") + "Normal";
             slimeAppearanceApplicator.Appearance = slimeAppearance;
@@ -142,7 +147,8 @@ namespace ShortcutLib.SR
             // *** END *** \\
             
             Identifiable.SLIME_CLASS.Add(id);
-            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("t.", id.ToLower()), name);
+            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("l", id.ToLower()), name);
+            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("t", id.ToLower()), name);
 
             id.AddToAmmo();
             id.RegisterVacDefinition(icon, colorPalette.Ammo, name.Replace(" ", ""));

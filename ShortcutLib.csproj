@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lib\SR\MaterialCut.cs" />
     <Compile Include="Lib\Utils\Extensions\StringExtensions.cs" />
     <Compile Include="_Legacy\Shortcut.cs" />
     <Compile Include="Lib\SR\AchievementCut.cs" />
