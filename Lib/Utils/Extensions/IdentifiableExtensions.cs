@@ -9,13 +9,13 @@ namespace ShortcutLib.Utils.Extensions
     /// </summary>
     public static class IdentifiableExtensions
     {
-        /// <summary>
-        /// Utilizes a gordo <see cref="Identifiable.Id"/> to search for a linked prefab using <see cref="LookupDirector"/>.
-        /// </summary>
-        /// <param name="identifiable">The gordo <see cref="Identifiable.Id"/> to search for.</param>
-        /// <returns><see cref="GameObject"/></returns>
-        public static GameObject GetGordo(this Identifiable.Id identifiable) => 
-            !Identifiable.GORDO_CLASS.Contains(identifiable) ? null : GameContext.Instance.LookupDirector.GetGordo(identifiable);
+        // /// <summary>
+        // /// Utilizes a gordo <see cref="Identifiable.Id"/> to search for a linked prefab using <see cref="LookupDirector"/>.
+        // /// </summary>
+        // /// <param name="identifiable">The gordo <see cref="Identifiable.Id"/> to search for.</param>
+        // /// <returns><see cref="GameObject"/></returns>
+        // public static GameObject GetGordo(this Identifiable.Id identifiable) => 
+        //     !Identifiable.GORDO_CLASS.Contains(identifiable) ? null : GameContext.Instance.LookupDirector.GetGordo(identifiable);
         
         /// <summary>
         /// Registers an <see cref="Identifiable.Id"/> to be a valid target for drones.

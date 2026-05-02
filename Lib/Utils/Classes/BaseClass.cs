@@ -148,35 +148,38 @@ namespace ShortcutLib.Utils.Classes
         /// <param name="id">A unique enum identifier for an <see cref="Identifiable"/>, typically typed as <see cref="Identifiable.Id"/>.</param>
         /// <param name="name">The full name of the gordo, this is automatically translated in-game.</param>
         /// <param name="icon">A <see cref="Sprite"/> icon to visually represent the gordo with in-game UI.</param>
-        /// <param name="definition">The <see cref="SlimeDefinition"/> of the gordo, typically belongs to the <see cref="BaseSlime"/> that the gordo is based on.</param>
+        /// <param name="baseSlime">The <see cref="BaseSlime"/> of the gordo, typically belongs to the <see cref="BaseSlime"/> that the gordo is based on.</param>
         /// <param name="prefab">The <see cref="GameObject"/> prefab of the gordo, automatically created along with the built-in method(s) for producing <see cref="BaseGordo"/>.</param>
         /// <param name="rewards">A list of rewards to spawn when popping the gordo, typically consists of <see cref="GameObject"/> prefabs.</param>
         /// <param name="zones">An array of <see cref="ZoneDirector.Zone"/>s the gordo naturally inhabitants.</param>
         /// <param name="feedCount">The amount of food required to pop the gordo, by default is set to 30.</param>
         /// <param name="persistentId">A persistent ID for the gordo, typically used in world placements. This is automatically created if not manually set.</param>
+        /// <param name="behaviours">Optional <see cref="MonoBehaviour"/> types to iterate through, and automatically add for custom-made behaviours.</param>
         /// <returns><see cref="BaseGordo"/></returns>
         public BaseGordo(
             Identifiable.Id id,
             string name,
             Sprite icon,
-            SlimeDefinition definition,
+            BaseSlime baseSlime,
             GameObject prefab,
-            List<GameObject> rewards,
+            GameObject[] rewards,
             ZoneDirector.Zone[] zones,
             int feedCount = 30,
+            Type[] behaviours = null,
             string persistentId = null)
         {
             Id = id;
             Name = name;
             Icon = icon;
-            Definition = definition;
+            BaseSlime = baseSlime;
             Prefab = prefab;
             Rewards = rewards;
             Zones = zones;
             FeedCount = feedCount;
+            Behaviours = behaviours ?? Array.Empty<Type>();
             PersistentId = persistentId.IsNullOrEmpty()
-            ? "gordo" + name.Replace(" ", "").Replace("Gordo", "")
-            : persistentId;;
+                ? "gordo" + name.Replace(" ", "").Replace("Gordo", "")
+                : persistentId;
         }
         
         public Identifiable.Id Id { get; }
@@ -184,14 +187,15 @@ namespace ShortcutLib.Utils.Classes
         public string Name { get; }
         public Sprite Icon { get; }
         
-
-        public SlimeDefinition Definition { get; }
+        public BaseSlime BaseSlime { get; }
         public GameObject Prefab { get; }
         
-        public List<GameObject> Rewards { get; }
+        public GameObject[] Rewards { get; }
+        public GameObject[] OverrideRewards { get; }
         public ZoneDirector.Zone[] Zones { get; }
         public int FeedCount { get; }
 
+        public Type[] Behaviours  { get; }
         public string PersistentId { get; }
     }
     
@@ -202,11 +206,19 @@ namespace ShortcutLib.Utils.Classes
             public Bones(
                 SlimeAppearance.SlimeBone root,
                 SlimeAppearance.SlimeBone parent,
-                SlimeAppearance.SlimeBone[] attached)
+                SlimeAppearance.SlimeBone[] attached = null)
             {
                 Root = root;
                 Parent = parent;
-                Attached = attached;
+                Attached = attached ?? new []
+                {
+                    SlimeAppearance.SlimeBone.JiggleBack,
+                    SlimeAppearance.SlimeBone.JiggleBottom,
+                    SlimeAppearance.SlimeBone.JiggleFront,
+                    SlimeAppearance.SlimeBone.JiggleLeft,
+                    SlimeAppearance.SlimeBone.JiggleRight,
+                    SlimeAppearance.SlimeBone.JiggleTop,
+                };
             }
             
             public SlimeAppearance.SlimeBone Root { get; }
@@ -237,6 +249,7 @@ namespace ShortcutLib.Utils.Classes
         public GameObject Prefab { get; }
         
         public SlimeAppearanceObject AppearanceObject { get; }
+        
         public bool IgnoreLODIndex { get; }
         
         public bool SupportsFaces { get; }

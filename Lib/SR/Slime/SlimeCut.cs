@@ -142,7 +142,7 @@ namespace ShortcutLib.SR
             // *** END *** \\
             
             Identifiable.SLIME_CLASS.Add(id);
-            TranslationPatcher.AddPediaTranslation("t." + id.ToString().ToLower(), name);
+            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("t.", id.ToLower()), name);
 
             id.AddToAmmo();
             id.RegisterVacDefinition(icon, colorPalette.Ammo, name.Replace(" ", ""));

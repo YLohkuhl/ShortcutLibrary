@@ -1,16 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RichPresence;
+using ShortcutLib.Utils.Classes;
+using ShortcutLib.Utils.Extensions;
 using SRML.SR;
 using SRML.SR.SaveSystem;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ShortcutLib.SR
 {
     public static partial class SlimeCut
     {
-        public static GameObject GetGordo(Identifiable.Id identifiable) => GameContext.Instance.LookupDirector.GetGordo(identifiable);
-
         // /// <summary>
         // /// Positions a gordo in the world based on the parent <see cref="Transform"/> and position <see cref="Vector3"/>.
         // /// </summary>
@@ -36,52 +38,61 @@ namespace ShortcutLib.SR
         //     instantiatedGordo.SetActive(true);
         //     return instantiatedGordo;
         // }
-        //
-        // public static GameObject CreateGordoBase(Identifiable.Id baseIdentifiable, Identifiable.Id identifiable,
-        //     Identifiable.Id slimeIdentifiable, Sprite icon, string name, int feedCount, ZoneDirector.Zone[] nativeZones,
-        //     List<GameObject> gordoRewards)
-        // {
-        //     GameObject prefab = GetGordo(baseIdentifiable).CreatePrefabCopy();
-        //     prefab.name = "gordo" + name.Replace(" ", "").Replace("Gordo", "");
-        //
-        //     SlimeDefinition slimeDefinition = Shortcut.Slime.GetSlimeDefinition(slimeIdentifiable);
-        //     Material slimeMaterial = slimeDefinition.AppearancesDefault[0].Structures[0].DefaultMaterials[0];
-        //     SlimeFace slimeFace = slimeDefinition.AppearancesDefault[0].Face;
-        //
-        //     GordoFaceComponents gordoFace = prefab.GetComponent<GordoFaceComponents>();
-        //     gordoFace.strainEyes = slimeFace.ExpressionFaces
-        //         .First(x => x.SlimeExpression == SlimeFace.SlimeExpression.Scared).Eyes;
-        //     gordoFace.strainMouth = slimeFace.ExpressionFaces
-        //         .First(x => x.SlimeExpression == SlimeFace.SlimeExpression.ChompClosed).Mouth;
-        //     gordoFace.blinkEyes = slimeFace.ExpressionFaces
-        //         .First(x => x.SlimeExpression == SlimeFace.SlimeExpression.Blink).Eyes;
-        //     gordoFace.chompOpenMouth = slimeFace.ExpressionFaces
-        //         .First(x => x.SlimeExpression == SlimeFace.SlimeExpression.ChompOpen).Mouth;
-        //     gordoFace.happyMouth = slimeFace.ExpressionFaces
-        //         .First(x => x.SlimeExpression == SlimeFace.SlimeExpression.Happy).Mouth;
-        //
-        //     prefab.GetComponent<GordoEat>().slimeDefinition = slimeDefinition;
-        //     prefab.GetComponent<GordoEat>().targetCount = feedCount;
-        //     prefab.GetComponent<GordoRewards>().rewardPrefabs = gordoRewards.ToArray();
-        //     prefab.GetComponent<GordoRewards>().slimePrefab = Shortcut.Prefab.GetPrefab(slimeIdentifiable);
-        //     prefab.GetComponent<GordoIdentifiable>().id = identifiable;
-        //     prefab.GetComponent<GordoIdentifiable>().nativeZones = nativeZones;
-        //
-        //     GordoDisplayOnMap displayOnMap = prefab.GetComponent<GordoDisplayOnMap>();
-        //     GameObject markerPrefab = displayOnMap.markerPrefab.gameObject.CreatePrefabCopy();
-        //     markerPrefab.name = "Gordo" + name.Replace(" ", "").Replace("Gordo", "") + "Marker";
-        //     markerPrefab.GetComponent<Image>().sprite = icon;
-        //
-        //     displayOnMap.gordoEat = prefab.GetComponent<GordoEat>();
-        //     displayOnMap.markerPrefab = markerPrefab.GetComponent<MapMarker>();
-        //
-        //     GameObject slime_gordo = prefab.transform.Find("Vibrating/slime_gordo").gameObject;
-        //     slime_gordo.GetComponent<SkinnedMeshRenderer>().sharedMaterial = slimeMaterial;
-        //
-        //     Identifiable.GORDO_CLASS.Add(identifiable);
-        //     Translate.Pedia("t." + identifiable.ToString().ToLower(), name);
-        //     LookupRegistry.RegisterGordo(prefab);
-        //     return prefab;
-        // }
+
+        public static void CreateBaseGordo(Identifiable.Id baseId, Identifiable.Id id, string name, Sprite icon, BaseSlime baseSlime,
+            ZoneDirector.Zone[] zones, GameObject[] rewards, out BaseGordo baseGordo, int feedCount = 30, Type[] behaviours = null,
+            string persistentId = null)
+        {
+            // *** PREFAB *** \\
+
+            var prefab = baseId.CopyPrefab();
+            prefab.name = "gordo" + name.NoSpace().Replace("Gordo", "");
+
+            var identifiable = prefab.GetComponent<GordoIdentifiable>();
+            identifiable.id = id;
+            identifiable.nativeZones = zones;
+
+            var eat = prefab.GetComponent<GordoEat>();
+            eat.slimeDefinition = baseSlime.Definition;
+            eat.targetCount = feedCount;
+
+            var rwd = prefab.GetComponent<GordoRewards>();
+            rwd.rewardPrefabs = rewards;
+            rwd.slimePrefab = baseSlime.Prefab;
+
+            var displayOnMap = prefab.GetComponent<GordoDisplayOnMap>();
+            var marker = displayOnMap.markerPrefab.gameObject.CopyPrefab();
+            marker.name = "Gordo" + name.NoSpace().Replace("Gordo", "") + "Marker";
+            marker.GetComponent<Image>().sprite = icon;
+
+            displayOnMap.gordoEat = eat;
+            displayOnMap.markerPrefab = marker.GetComponent<MapMarker>();
+
+            if (behaviours != null)
+                foreach (var behaviour in behaviours)
+                    prefab.AddComponent(behaviour);
+            
+            // *** APPEARANCE *** \\
+
+            var expressionFaces = baseSlime.Appearance.Face.ExpressionFaces;
+            var face = prefab.GetComponent<GordoFaceComponents>();
+            face.blinkEyes = expressionFaces.First(x => x.SlimeExpression == SlimeFace.SlimeExpression.Blink).Eyes;
+            face.chompOpenMouth = expressionFaces.First(x => x.SlimeExpression == SlimeFace.SlimeExpression.ChompOpen).Mouth;
+            face.happyMouth = expressionFaces.First(x => x.SlimeExpression == SlimeFace.SlimeExpression.Happy).Mouth;
+            face.strainEyes = expressionFaces.First(x => x.SlimeExpression == SlimeFace.SlimeExpression.Scared).Eyes;
+            face.strainMouth = expressionFaces.First(x => x.SlimeExpression == SlimeFace.SlimeExpression.ChompClosed).Mouth;
+
+            prefab.transform.Find("Vibrating/slime_gordo").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMaterial =
+                baseSlime.Appearance.Structures[0].DefaultMaterials[0];
+
+            // *** END *** \\
+
+            Identifiable.GORDO_CLASS.Add(id);
+            TranslationPatcher.AddPediaTranslation(TranslationCut.CreateKey("t.", id.ToLower()), name);
+
+            LookupRegistry.RegisterGordo(prefab);
+
+            baseGordo = new BaseGordo(id, name, icon, baseSlime, prefab, rewards, zones, feedCount, behaviours, persistentId);
+        }
     }
 }
